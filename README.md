@@ -1,1 +1,1 @@
-# study-webdev-bootcamp
+# webdev-bootcamp
