@@ -10,23 +10,26 @@
         <h1>Race Registration</h1>
         <main>
             <form action="">
-                <p>
+                <div>
                     <label for="first">first name</label>
-                    <input type="text" name="first" id="first" required />
+                    <input type="text" name="firstname" id="first" required />
                     <label for="last">last name</label>
-                    <input type="text" name="last" id="last" required />
-                </p>
-                <p>
-                    <label for="">select a race</label><br>
-
-                    <label for="5k">fun run 5k</label>
-                    <input type="radio" name="race" id="5k" value="5k"><br>
+                    <input type="text" name="lastname" id="last" required />
+                </div>
+                <p><label for="">select a race</label><br /></p>
+                <div>
+                    <input type="radio" name="race" id="funrun" value="5k" />
+                    <label for="funrun">fun run 5k</label>
+                </div>
+                <div>
+                    <input type="radio" name="race" id="half" value="half" />
                     <label for="half">half marathon</label>
-                    <input type="radio" name="race" id="half" value="half"><br>
+                </div>
+                <div>
+                    <input type="radio" name="race" id="full" value="full" />
                     <label for="full">full marathon</label>
-                    <input type="radio" name="race" id="full" value="full">
-                </p>
-                <p>
+                </div>
+                <div>
                     <label for="email">email</label>
                     <input type="email" name="email" id="email" required />
                     <label for="password">password</label>
@@ -36,15 +39,15 @@
                         id="password"
                         required
                     />
-                </p>
-                <p>
-                    <label for="age">select age group</label>
-                    <select name="age" id="age">
-                        <option value="">under 18</option>
-                        <option value="">under 18</option>
-                        <option value="">under 18</option>
+                </div>
+                <div>
+                    <label for="division">select division group</label>
+                    <select name="division" id="age">
+                        <option value="a">under 18</option>
+                        <option value="b">18-30</option>
+                        <option value="c">30-50</option>
                     </select>
-                </p>
+                </div>
                 <p>
                     <button>Register</button>
                 </p>
