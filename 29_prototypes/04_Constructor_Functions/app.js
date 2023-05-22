@@ -33,6 +33,8 @@ console.log(color2.rgb());
 console.log(color1.hex());
 console.log(color2.hex());
 console.log(color1.hex === color2.hex);
+console.log(color1.hex === color3.hex);
+console.log(color2.hex === color3.hex);
 
 // color1.hex = #28323c
 // color2.hex = #000000
