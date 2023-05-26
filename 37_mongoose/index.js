@@ -6,6 +6,7 @@ mongoose
     .connect(process.env.URI, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
+        dbName: "movieApp",
     })
     .then(() => console.log("connection open"))
     .catch((err) => {
