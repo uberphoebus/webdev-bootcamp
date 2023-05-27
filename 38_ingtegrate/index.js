@@ -32,17 +32,24 @@ const log_routes = (req, res, action = "") => {
     );
 };
 
+const categories = ["fruit", "vegetable", "dairy", "fungi"];
+
 // app routes
 app.get("/products", async (req, res) => {
     log_routes(req, res);
-    // console.log(`[${"request".padEnd(7)}] ${"GET".padEnd(4)} /products`);
-    const products = await Product.find({});
-    res.render("products/index", { products });
+    const { category } = req.query;
+    if (category) {
+        const products = await Product.find({ category });
+        res.render("products/index", { products, category });
+    } else {
+        const products = await Product.find({});
+        res.render("products/index", { products, category: "All" });
+    }
 });
 
 app.get("/products/new", (req, res) => {
     log_routes(req, res);
-    res.render("products/new");
+    res.render("products/new", { categories });
 });
 
 app.post("/products", async (req, res) => {
@@ -64,15 +71,26 @@ app.get("/products/:id/edit", async (req, res) => {
     const { id } = req.params;
     log_routes(req, res);
     const product = await Product.findById(id);
-    res.render("products/edit", { product });
+    res.render("products/edit", { product, categories });
 });
 
 app.put("/products/:id", async (req, res) => {
     const { id } = req.params;
     log_routes(req, res);
-    Product.findByIdAndUpdate(id, req.body, { runValidators: true });
+    const product = await Product.findByIdAndUpdate(id, req.body, {
+        runValidators: true,
+        new: true,
+    });
     log_routes(req, res, `updated: ${req.body.name}`);
-    res.send("PUT");
+    res.redirect(`/products/${product._id}`);
+});
+
+app.delete("/products/:id", async (req, res) => {
+    const { id } = req.params;
+    log_routes(req, res);
+    const deletedProduct = await Product.findByIdAndDelete(id);
+    log_routes(req, res, `deleted: ${deletedProduct.name}`);
+    res.redirect("/products");
 });
 
 // app listen
