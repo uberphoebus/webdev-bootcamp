@@ -1,0 +1,26 @@
+h2 {
+    color: #5fcffc;
+    background-color: rgb(89, 151, 0);
+}
+
+button {
+    color: magenta;
+    background-color: cyan;
+}
+
+p {
+    color: olive;
+}
+
+body {
+    background-color: white;
+}
+
+h1 {
+    text-align: center;
+    font-weight: 900;
+    text-decoration: blue underline wavy;
+    letter-spacing: 15px;
+    font-size: 80px;
+    font-family: Futra, Arial;
+}

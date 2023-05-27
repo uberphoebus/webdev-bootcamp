@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Race Register Form</title>
+    </head>
+    <body>
+        <h1>Race Registration</h1>
+        <main>
+            <form action="">
+                <div>
+                    <label for="first">first name</label>
+                    <input type="text" name="firstname" id="first" required />
+                    <label for="last">last name</label>
+                    <input type="text" name="lastname" id="last" required />
+                </div>
+                <p><label for="">select a race</label><br /></p>
+                <div>
+                    <input type="radio" name="race" id="funrun" value="5k" />
+                    <label for="funrun">fun run 5k</label>
+                </div>
+                <div>
+                    <input type="radio" name="race" id="half" value="half" />
+                    <label for="half">half marathon</label>
+                </div>
+                <div>
+                    <input type="radio" name="race" id="full" value="full" />
+                    <label for="full">full marathon</label>
+                </div>
+                <div>
+                    <label for="email">email</label>
+                    <input type="email" name="email" id="email" required />
+                    <label for="password">password</label>
+                    <input
+                        type="password"
+                        name="password"
+                        id="password"
+                        required
+                    />
+                </div>
+                <div>
+                    <label for="division">select division group</label>
+                    <select name="division" id="age">
+                        <option value="a">under 18</option>
+                        <option value="b">18-30</option>
+                        <option value="c">30-50</option>
+                    </select>
+                </div>
+                <p>
+                    <button>Register</button>
+                </p>
+            </form>
+        </main>
+    </body>
+</html>
