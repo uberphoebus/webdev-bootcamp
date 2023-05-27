@@ -14,6 +14,7 @@ mongoose
         console.log(err);
     });
 
+// model schema
 const productSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -46,19 +47,43 @@ const productSchema = new mongoose.Schema({
     },
 });
 
+// instance method
 productSchema.methods.greet = function () {
     console.log("Hello!");
     console.log(`- from ${this.name}`);
 };
 
-const Product = mongoose.model("Product", productSchema);
-
-const findProduct = async () => {
-    const foundProduct = await Product.findOne({ name: "Mountain Bike" });
-    foundProduct.greet();
+productSchema.methods.toggleOnSale = function () {
+    this.onSale = !this.onSale;
+    return this.save();
 };
 
-findProduct();
+productSchema.methods.addCategory = function (newCat) {
+    this.categories.push(newCat);
+    return this.save();
+};
+
+// static method
+productSchema.statics.fireSale = function () {
+    return this.updateMany({}, { onSale: true, price: 0 });
+};
+
+// model
+const Product = mongoose.model("Product", productSchema);
+
+// instance
+const findProduct = async () => {
+    const foundProduct = await Product.findOne({ name: "Mountain Bike" });
+    console.log(foundProduct);
+    await foundProduct.toggleOnSale();
+    console.log(foundProduct);
+    await foundProduct.addCategory("Outdoors");
+    console.log(foundProduct);
+};
+
+Product.fireSale().then((res) => console.log(res));
+
+// findProduct();
 
 // const bike = new Product({
 //     name: "Cycling Jersey",
