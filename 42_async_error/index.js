@@ -35,9 +35,16 @@ const log_routes = (req, res, action = "") => {
 
 const categories = ["fruit", "vegetable", "dairy", "fungi"];
 
+function wrapAsync(fn) {
+    return function (req, res, next) {
+        fn(req, res, next).catch((e) => next(e));
+    };
+}
+
 // app routes
-app.get("/products", async (req, res, next) => {
-    try {
+app.get(
+    "/products",
+    wrapAsync(async (req, res, next) => {
         log_routes(req, res);
         const { category } = req.query;
         if (category) {
@@ -47,30 +54,28 @@ app.get("/products", async (req, res, next) => {
             const products = await Product.find({});
             res.render("products/index", { products, category: "All" });
         }
-    } catch (e) {
-        next(e);
-    }
-});
+    })
+);
 
 app.get("/products/new", (req, res) => {
     log_routes(req, res);
     res.render("products/new", { categories });
 });
 
-app.post("/products", async (req, res, next) => {
-    log_routes(req, res);
-    try {
+app.post(
+    "/products",
+    wrapAsync(async (req, res, next) => {
+        log_routes(req, res);
         const newProduct = new Product(req.body);
         await newProduct.save();
         log_routes(req, res, `saved: ${newProduct.name}`);
         res.redirect(`products/${newProduct._id}`);
-    } catch (e) {
-        next(e);
-    }
-});
+    })
+);
 
-app.get("/products/:id", async (req, res, next) => {
-    try {
+app.get(
+    "/products/:id",
+    wrapAsync(async (req, res, next) => {
         const { id } = req.params;
         log_routes(req, res);
         const product = await Product.findById(id);
@@ -78,13 +83,12 @@ app.get("/products/:id", async (req, res, next) => {
             throw new AppError("Product not found", 404);
         }
         res.render("products/show", { product });
-    } catch (e) {
-        next(e);
-    }
-});
+    })
+);
 
-app.get("/products/:id/edit", async (req, res, next) => {
-    try {
+app.get(
+    "/products/:id/edit",
+    wrapAsync(async (req, res, next) => {
         const { id } = req.params;
         log_routes(req, res);
         const product = await Product.findById(id);
@@ -92,13 +96,12 @@ app.get("/products/:id/edit", async (req, res, next) => {
             throw new AppError("Product not found", 404);
         }
         res.render("products/edit", { product, categories });
-    } catch (e) {
-        next(e);
-    }
-});
+    })
+);
 
-app.put("/products/:id", async (req, res, next) => {
-    try {
+app.put(
+    "/products/:id",
+    wrapAsync(async (req, res, next) => {
         const { id } = req.params;
         log_routes(req, res);
         const product = await Product.findByIdAndUpdate(id, req.body, {
@@ -107,18 +110,19 @@ app.put("/products/:id", async (req, res, next) => {
         });
         log_routes(req, res, `updated: ${req.body.name}`);
         res.redirect(`/products/${product._id}`);
-    } catch (e) {
-        next(e);
-    }
-});
+    })
+);
 
-app.delete("/products/:id", async (req, res) => {
-    const { id } = req.params;
-    log_routes(req, res);
-    const deletedProduct = await Product.findByIdAndDelete(id);
-    log_routes(req, res, `deleted: ${deletedProduct.name}`);
-    res.redirect("/products");
-});
+app.delete(
+    "/products/:id",
+    wrapAsync(async (req, res) => {
+        const { id } = req.params;
+        log_routes(req, res);
+        const deletedProduct = await Product.findByIdAndDelete(id);
+        log_routes(req, res, `deleted: ${deletedProduct.name}`);
+        res.redirect("/products");
+    })
+);
 
 app.use((err, req, res, next) => {
     const { status = 500, message = "Something went wrong" } = err;
