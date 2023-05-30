@@ -4,6 +4,7 @@ const User = require("./models/user");
 const mongoose = require("mongoose");
 const env = require("dotenv");
 const bcrypt = require("bcrypt");
+const session = require("express-session");
 
 env.config();
 mongoose
@@ -21,9 +22,14 @@ mongoose
 app.set("view engine", "ejs");
 app.set("views", "views");
 app.use(express.urlencoded({ extended: true }));
+app.use(session({ secret: "notagoodsecret" }));
 
 app.get("/register", (req, res) => {
     res.render("register");
+});
+
+app.get("/", (req, res) => {
+    res.send("This is the home page!");
 });
 
 app.post("/register", async (req, res) => {
@@ -35,7 +41,8 @@ app.post("/register", async (req, res) => {
         password: hash,
     });
     await user.save();
-    res.redirect("/secret");
+    req.session.user_id = user._id;
+    res.redirect("/");
 });
 
 app.get("/login", (req, res) => {
@@ -47,14 +54,19 @@ app.post("/login", async (req, res) => {
     const user = await User.findOne({ username: username });
     const validPassword = await bcrypt.compare(password, user.password);
     if (validPassword) {
-        res.send("YAY WELCOME");
+        req.session.user_id = user._id;
+        res.redirect("/secret");
     } else {
-        res.send("TRY AGAIN");
+        res.redirect("/login");
     }
 });
 
 app.get("/secret", (req, res) => {
-    res.send("This is a secret page!");
+    if (!req.session.user_id) {
+        res.redirect("/login");
+    } else {
+        res.send("This is a secret page!");
+    }
 });
 
 app.listen(3000, (req, res) => {
